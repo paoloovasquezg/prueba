@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simula tú credito</title>
+</head>
+<body>
+    <p>
+        Simula tu crédito: {{mandado}}
+    </p>
+    <form id = 'form'>
+        <div>
+            <label for = 'field1'>Nombres</label>
+            <input type = 'text' id = 'Nombre' name = 'Nombre'>
+        </div>
+        <div>
+            <label for = 'field2'>Apellidos</label>
+            <input type = 'text' id = 'Apellidos' name = 'Apellidos'>
+        </div>
+        <div>
+            <label for = 'field3'>Sexo</label>
+            <input type = 'text' id = 'Sexo' name = 'Sexo'>
+        </div>
+        <div>
+            <label for = 'field4'>Tipo de documento</label>
+            <input type = 'text' id = 'TD' name = 'TD'>
+        </div>
+        <div>
+            <label for = 'field5'>Número de documento</label>
+            <input type = 'text' id = 'ND' name = 'ND'>
+        </div>
+        <div>
+            <label for = 'field6'>Email</label>
+            <input type = 'text' id = 'Em' name = 'Em'>
+        </div>
+        <div>
+            <label for = 'field7'>Valor del Vehículo en Soles</label>
+            <input type = 'text' id = 'VV' name = 'VV'>
+        </div>
+        <div>
+            <label for = 'field8'>Monto de cuota inicial</label>
+            <input type = 'text' id = 'MCI' name = 'MCI'>
+        </div>
+        <div>
+            <input type="submit", value = 'Simular'
+        </div>
+    </form>
+
+    <div id = 'aprobado' style = 'color: blue'>
+    </div>
+
+    <div id = 'texto'>
+    </div>
+
+    <div id = 'noaprobado' style = 'color:red'>
+    </div>
+
+    <script>
+        const nombresinput = document.getElementById('Nombre');
+        const apellidosinput = document.getElementById('Apellidos');
+        const sexoinput = document.getElementById('Sexo');
+        const tdinput = document.getElementById('TD');
+        const ndinput = document.getElementById('ND');
+        const eminput = document.getElementById('Em');
+        const vvinput = document.getElementById('VV');
+        const mcinput = document.getElementById('MCI');
+        document.getElementById('form').onsubmit = function(e) {
+            e.preventDefault();
+            const nombre = nombresinput.value
+            const apellidos = apellidosinput.value
+            const sexo = sexoinput.value
+            const td = tdinput.value
+            const nd = ndinput.value
+            const em = eminput.value
+            const vv = vvinput.value
+            const mc = mcinput.value
+            fetch('/credito/simular', {
+                method: 'POST',
+                body: JSON.stringify({
+                    'nombre': nombre,
+                    'apellidos': apellidos,
+                    'sexo': sexo,
+                    'td':td,
+                    'nd':nd,
+                    'em':em,
+                    'vv':vv,
+                    'mc':mc,
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                console.log("response: ", response);
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                console.log("jsonResponse: ", jsonResponse);
+                const rt = document.createElement('p');
+                const rb = document.createElement('p');
+                if (jsonResponse['operacion'] >= 50000){
+                    rt.innerHTML = 'No apto para el prestamo';
+                    document.getElementById('noaprobado').append(rt);
+                }
+                else{
+                    rb.innerHTML = 'Usted está apto para el prestamo!';
+                    rt.innerHTML = jsonResponse['nombres'] + " - " + jsonResponse['apellidos'] + " - " + jsonResponse['sexo'] 
+                    + " - " + jsonResponse['tipo_documento'] + " - " + jsonResponse['num_documento'] + " - " + jsonResponse['email'] + " - " + 
+                    jsonResponse['val_vehiculo'] + " - " + jsonResponse['cout_inicial'];
+                    document.getElementById('aprobado').append(rb);
+                    document.getElementById('texto').append(rt);
+                }
+
+                    document.getElementById('Nombre').value = '';
+                    document.getElementById('Apellidos').value = '';
+                    document.getElementById('Sexo').value = '';
+                    document.getElementById('TD').value  = '';
+                    document.getElementById('ND').value  = '';
+                    document.getElementById('Em').value = '';
+                    document.getElementById('VV').value = '';
+                    document.getElementById('MCI').value = '';
+            });
+        }
+    </script>
+</body>
+</html>
