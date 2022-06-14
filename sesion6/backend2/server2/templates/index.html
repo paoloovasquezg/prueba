@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>server2: 5001</title>
+    </head>
+    <body id="load">
+        <h2>server2</h2>
+    </body>
+    <script>
+       document.getElementById('load').onload = function(e) {
+           e.preventDefault();
+           const URL = 'http://127.0.0.1:5000/todos';
+           fetch(URL)
+           .then(function(response) {
+               console.log(response);
+               return response.json();
+           }).then(function(jsonResponse){
+               console.log('jsonResponse: ', jsonResponse);
+           }).catch(function(error){
+               console.log('error: ', error);
+           });
+       } 
+    </script>
+</html>
