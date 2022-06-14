@@ -44,4 +44,3 @@ Crear un Sistema de Información Web que satisfaga los siguientes requerimientos
   </ol>
   <li>El Laboratorio tiene un tiempo de 2 horas, pasado ese tiempo no se aceptan nuevos commits.</li>
 </ul>
-![image](https://user-images.githubusercontent.com/106604964/173653302-4ef190d0-51ca-43e8-87bc-fe12c7f40d92.png)
